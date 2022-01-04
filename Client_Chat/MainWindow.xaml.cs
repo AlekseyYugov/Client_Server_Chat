@@ -24,5 +24,16 @@ namespace Client_Chat
         {
             InitializeComponent();
         }
+        private void bOpen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void bRegistr_Click(object sender, RoutedEventArgs e)
+        {
+            WindowRegistr windowRegistr = new WindowRegistr();
+            windowRegistr.Owner = this;
+            windowRegistr.Show();
+        }
     }
 }
