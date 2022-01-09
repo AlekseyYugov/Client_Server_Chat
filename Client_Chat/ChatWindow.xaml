@@ -23,7 +23,7 @@
             <TextBlock Text="Введите порт" FontSize="20" Grid.Column="2" TextAlignment="Center"/>
             <TextBox x:Name="tbPort" Grid.Column="3" FontSize="20" TextAlignment="Center"/>
         </Grid>
-        <Button x:Name="bConnectDisconnect" Content="Подключиться" FontSize="30" Height="50" Click="bConnectDisconnect_Click"/>
+        <Button x:Name="bConnect" Content="Подключиться" FontSize="30" Height="50" Click="bConnect_Click"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <TextBlock x:Name="tMessage" TextWrapping="Wrap" Height="250"/>
         </ScrollViewer>

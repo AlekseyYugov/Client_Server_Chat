@@ -33,35 +33,40 @@ namespace Client_Chat
             byte[] data = new byte[64];
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
-            
-            try
+
+            if (stream != null)
             {
-                if (stream != null)
+                try
                 {
-                    do
-                    {
-                        bytes = stream.Read(data, 0, data.Length);
-                        builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
-
-                    } while (stream.DataAvailable);
-
+                    bytes = stream.Read(data, 0, data.Length);
+                    builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                 }
-            }
-            catch (System.ObjectDisposedException)
-            {
+                catch (System.ObjectDisposedException)
+                {
 
-                tMessage.Text += "Вы успешно отключились от сервера\n";
-                bConnectDisconnect.Content = "Подключиться";
-                stream.Close();
-                client.Close();
+                    bytes = 0;
+                }
+                
+
             }
             message = builder.ToString();
             Message(message);
         }
         public void Message(string message_nov)
         {
-            Dispatcher.Invoke(() => tMessage.Text += message_nov + "\n");
-            Function();
+            try
+            {
+                Dispatcher.Invoke(() => tMessage.Text += message_nov + "\n");
+                Function();
+            }
+            catch (System.Threading.Tasks.TaskCanceledException)
+            {
+
+                client.Close();
+                stream.Close();
+            }
+            
+
         }
 
 
@@ -77,8 +82,6 @@ namespace Client_Chat
         {
             if (tbMessageOutput.Text != null && tbMessageOutput.Text != "Введите сообщение" && tbMessageOutput.Text != "" && stream != null)
             {
-                //tMessage.Text += tbMessageOutput.Text + "\n";
-                MainWindow mainWindow = new MainWindow();
                 message = String.Format("{0}:{1}", name, tbMessageOutput.Text);
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 stream.Write(data, 0, data.Length);
@@ -87,64 +90,51 @@ namespace Client_Chat
             
         }
 
-        private void bConnectDisconnect_Click(object sender, RoutedEventArgs e)
+        private void bConnect_Click(object sender, RoutedEventArgs e)
         {
             Task task = null;
-            if (Convert.ToString(bConnectDisconnect.Content) == "Подключиться")
+            try
             {
-                
-                try
-                {
-                    client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
-                    stream = client.GetStream();
-                }
-                catch (System.NullReferenceException)
-                {
+                client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
+                stream = client.GetStream();
+            }
+            catch (System.NullReferenceException)
+            {
 
-                    tMessage.Text += "Подключение не удалось!\n";
-                }
-                catch(SocketException)
-                {
-                    tMessage.Text += "Подключение не удалось!\n";
-                }
+                tMessage.Text += "Подключение не удалось!\n";
+            }
+            catch (SocketException)
+            {
+                tMessage.Text += "Подключение не удалось!\n";
+            }
 
+            if (stream != null)
+            {
+                task = Task.Run(Function);
+                tMessage.Text += "Вы успешно подключились к серверу\n";
+                bConnect.IsEnabled = false;
+                SQLConnect connect = new SQLConnect();
+                message = string.Format(connect.ReceiveName(tNick.Text));
+                byte[] data = Encoding.Unicode.GetBytes(message);
                 if (stream != null)
                 {
-                    task = Task.Run(Function);
-                    tMessage.Text += "Вы успешно подключились к серверу\n";
-
-                    SQLConnect connect = new SQLConnect();
-                    message = string.Format(connect.ReceiveName(tNick.Text));
-                    byte[] data = Encoding.Unicode.GetBytes(message);
-                    if (stream != null)
-                    {
-                        stream.Write(data, 0, data.Length);
-                    }
-
-
-                    bConnectDisconnect.Content = "Отключиться";
+                    stream.Write(data, 0, data.Length);
                 }
-                
             }
-            else
-            {
-                tMessage.Text += "Вы успешно отключились от сервера\n";
-                bConnectDisconnect.Content = "Подключиться";
-                stream.Close();
-                client.Close();
 
-
-            }
-            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (stream != null)
+            {
+                message = String.Format("{0}:{1}", name, "|||exit");
+                byte[] data = Encoding.Unicode.GetBytes(message);
+                stream.Write(data, 0, data.Length);
+                client.Close();
+                stream.Close();
+            }
             
-            tMessage.Text += "Вы успешно отключились от сервера\n";
-            bConnectDisconnect.Content = "Подключиться";
-            stream.Close();
-            client.Close();
         }
     }
 }

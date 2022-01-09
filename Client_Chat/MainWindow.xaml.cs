@@ -33,6 +33,7 @@ namespace Client_Chat
                 ChatWindow chatWindow = new ChatWindow();
                 chatWindow.Show();
                 chatWindow.tNick.Text = tbLogin.Text; // проверка
+                Close();
             }
             else
             {
