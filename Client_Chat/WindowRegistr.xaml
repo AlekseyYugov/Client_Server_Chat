@@ -22,11 +22,11 @@
         <TextBlock Text="Введите логин" FontSize="30" Grid.Column="1" VerticalAlignment="Top" TextAlignment="Center"/>
         <TextBox x:Name="tbLogin" FontSize="30" Grid.Column="2" VerticalAlignment="Top" MaxLength="10" TextAlignment="Center"/>
         <TextBlock Text="Введите пароль" FontSize="30" Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" TextAlignment="Center"/>
-        <PasswordBox x:Name="tbPassword" PasswordChar="*" Grid.Row="0" Grid.Column="2" FontSize="30" VerticalAlignment="Bottom" MaxLength="10"/>
+        <PasswordBox x:Name="pbPassword" PasswordChar="*" Grid.Row="0" Grid.Column="2" FontSize="30" VerticalAlignment="Bottom" MaxLength="10"/>
         <TextBlock Text="Повторите пароль" FontSize="30" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalAlignment="Center"/>
-        <PasswordBox x:Name="tbPassword_2" PasswordChar="*" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" FontSize="30"/>
+        <PasswordBox x:Name="pbPassword_2" PasswordChar="*" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" FontSize="30"/>
         <TextBlock Text="Введите имя" FontSize="30" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" TextAlignment="Center"/>
-        <TextBox x:Name="tbName" FontSize="30" Grid.Row="2" Grid.Column="2" VerticalAlignment="Top" TextAlignment="Center"/>
+        <TextBox x:Name="tbName" FontSize="30" Grid.Row="2" Grid.Column="2" VerticalAlignment="Top" TextAlignment="Center" MaxLength="10"/>
         <Button x:Name="bRegistr_NewWindow" Content="Зарегистрироваться" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" FontSize="40" Click="bRegistr_NewWindow_Click"/>
         <TextBlock x:Name="ShowEx_RegistrWindow" Foreground="Red" FontSize="20" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" TextAlignment="Center" VerticalAlignment="Center" Margin="0,55,0,0"/>
         <TextBlock x:Name="SuccessfulRegistration" Foreground="Green" FontSize="20" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" VerticalAlignment="Center" TextAlignment="Center" Margin="0,55,0,0"/>

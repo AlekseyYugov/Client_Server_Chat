@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client_Chat"
         mc:Ignorable="d"
-        Title="ChatWindow" Height="450" Width="800">
+        Title="ChatWindow" Height="480" Width="800" Closing="Window_Closing">
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -24,10 +24,11 @@
             <TextBox x:Name="tbPort" Grid.Column="3" FontSize="20" TextAlignment="Center"/>
         </Grid>
         <Button x:Name="bConnectDisconnect" Content="Подключиться" FontSize="30" Height="50" Click="bConnectDisconnect_Click"/>
-        <ScrollViewer>
-            <TextBlock x:Name="tMessage" Height="250"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <TextBlock x:Name="tMessage" TextWrapping="Wrap" Height="250"/>
         </ScrollViewer>
         <TextBox x:Name="tbMessageOutput" Text="Введите сообщение" FontSize="20" Height="80" PreviewMouseLeftButtonDown="tbMessageOutput_PreviewMouseLeftButtonDown"/>
         <Button x:Name="bSend" Content="Отправить" FontSize="20" Height="35" Click="bSend_Click"/>
+        <TextBlock x:Name="tNick"/>
     </StackPanel>
 </Window>

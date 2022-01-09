@@ -26,7 +26,18 @@ namespace Client_Chat
         }
         private void bOpen_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowEx_MainWindow.Text = null;
+            SQLConnect connect = new SQLConnect();
+            if (connect.ReadingClientForOpenChat(tbLogin.Text, pbPassword.Password))
+            {
+                ChatWindow chatWindow = new ChatWindow();
+                chatWindow.Show();
+                chatWindow.tNick.Text = tbLogin.Text; // проверка
+            }
+            else
+            {
+                ShowEx_MainWindow.Text = "Неверно указан логин или пароль";
+            }
         }
 
         private void bRegistr_Click(object sender, RoutedEventArgs e)

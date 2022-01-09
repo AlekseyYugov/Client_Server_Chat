@@ -33,11 +33,28 @@ namespace Client_Chat
             byte[] data = new byte[64];
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
-            do
+            
+            try
             {
-                bytes = stream.Read(data, 0, data.Length);
-                builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
-            } while (stream.DataAvailable);
+                if (stream != null)
+                {
+                    do
+                    {
+                        bytes = stream.Read(data, 0, data.Length);
+                        builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
+
+                    } while (stream.DataAvailable);
+
+                }
+            }
+            catch (System.ObjectDisposedException)
+            {
+
+                tMessage.Text += "Вы успешно отключились от сервера\n";
+                bConnectDisconnect.Content = "Подключиться";
+                stream.Close();
+                client.Close();
+            }
             message = builder.ToString();
             Message(message);
         }
@@ -58,21 +75,76 @@ namespace Client_Chat
 
         private void bSend_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
-            message = String.Format("{0}:{1}", name, tbMessageOutput.Text);
-            byte[] data = Encoding.Unicode.GetBytes(message);
-            stream.Write(data, 0, data.Length);
-            tbMessageOutput.Text = null;
+            if (tbMessageOutput.Text != null && tbMessageOutput.Text != "Введите сообщение" && tbMessageOutput.Text != "" && stream != null)
+            {
+                //tMessage.Text += tbMessageOutput.Text + "\n";
+                MainWindow mainWindow = new MainWindow();
+                message = String.Format("{0}:{1}", name, tbMessageOutput.Text);
+                byte[] data = Encoding.Unicode.GetBytes(message);
+                stream.Write(data, 0, data.Length);
+                tbMessageOutput.Text = null;
+            }
+            
         }
 
         private void bConnectDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
-            stream = client.GetStream();
+            Task task = null;
+            if (Convert.ToString(bConnectDisconnect.Content) == "Подключиться")
+            {
+                
+                try
+                {
+                    client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
+                    stream = client.GetStream();
+                }
+                catch (System.NullReferenceException)
+                {
 
-            Task task = Task.Run(Function);
-            tMessage.Text += "Вы успешно подключились к серверу\n";
-            bConnectDisconnect.Content = "Отключиться";
+                    tMessage.Text += "Подключение не удалось!\n";
+                }
+                catch(SocketException)
+                {
+                    tMessage.Text += "Подключение не удалось!\n";
+                }
+
+                if (stream != null)
+                {
+                    task = Task.Run(Function);
+                    tMessage.Text += "Вы успешно подключились к серверу\n";
+
+                    SQLConnect connect = new SQLConnect();
+                    message = string.Format(connect.ReceiveName(tNick.Text));
+                    byte[] data = Encoding.Unicode.GetBytes(message);
+                    if (stream != null)
+                    {
+                        stream.Write(data, 0, data.Length);
+                    }
+
+
+                    bConnectDisconnect.Content = "Отключиться";
+                }
+                
+            }
+            else
+            {
+                tMessage.Text += "Вы успешно отключились от сервера\n";
+                bConnectDisconnect.Content = "Подключиться";
+                stream.Close();
+                client.Close();
+
+
+            }
+            
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
+            tMessage.Text += "Вы успешно отключились от сервера\n";
+            bConnectDisconnect.Content = "Подключиться";
+            stream.Close();
+            client.Close();
         }
     }
 }
