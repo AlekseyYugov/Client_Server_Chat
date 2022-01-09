@@ -12,15 +12,19 @@ namespace Server_Chat
     {
         public void InsertMessage(string _name, string _message, string _time)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
-            string sqlExpressionInsert = String.Format("INSERT INTO History(Name, Message, Time) VALUES('{0}', '{1}', '{2}')", _name, _message, _time);
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            if (_message != null && _message != "")
             {
-                connection.Open();
-                SqlCommand command = new SqlCommand(sqlExpressionInsert, connection);
-                int number = command.ExecuteNonQuery();
+                string connectionString = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
+                string sqlExpressionInsert = String.Format("INSERT INTO History(Name, Message, Time) VALUES('{0}', '{1}', '{2}')", _name, _message, _time);
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(sqlExpressionInsert, connection);
+                    int number = command.ExecuteNonQuery();
+                }
             }
+            
         }
     }
 }
