@@ -33,7 +33,7 @@ namespace Server_Chat
                 string message = GetMessage();
                 userName = message;
 
-                message = userName + " вошел в чат";
+                message = userName + " вошел в чат\n";
                 // посылаем сообщение о входе в чат всем подключенным пользователям
                 server.BroadcastMessage(message, this.Id);
                 Console.WriteLine(message);
@@ -45,20 +45,20 @@ namespace Server_Chat
                         message = GetMessage();
                         if (message == ":|||exit")
                         {
-                            message = String.Format("{0}: покинул чат", userName);
+                            message = String.Format("{0}: покинул чат\n", userName);
                             Console.WriteLine(message);
                             server.BroadcastMessage(message, this.Id);
                             break;
                         }
                         messageHistory.InsertMessage(userName, message, Convert.ToString(DateTime.Now));
-                        message = String.Format("{0}: {1}", userName, message) + " : " + DateTime.Now;
+                        message = String.Format("{0}: {1}", userName, message) + " : " + DateTime.Now + "\n";
                         Console.WriteLine(message);
                         server.BroadcastMessage(message, this.Id);
 
                     }
                     catch
                     {
-                        message = String.Format("{0}: покинул чат", userName);
+                        message = String.Format("{0}: покинул чат\n", userName);
                         Console.WriteLine(message);
                         server.BroadcastMessage(message, this.Id);
                         break;
