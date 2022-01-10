@@ -23,6 +23,7 @@ namespace Client_Chat
         TcpClient client = null;
         NetworkStream stream = null;
         public string name = null;
+        public string getName = null;
         public ChatWindow()
         {
             InitializeComponent();
@@ -54,8 +55,10 @@ namespace Client_Chat
 
             }
             message = builder.ToString();
+            
             Message(message);
         }
+
         public void Message(string message_nov)
         {
             try
@@ -77,7 +80,11 @@ namespace Client_Chat
 
         private void tbMessageOutput_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            tbMessageOutput.Text = null;
+            if (tbMessageOutput.Text == "Введите сообщение")
+            {
+                tbMessageOutput.Text = null;
+            }
+            
         }
 
 
@@ -86,7 +93,7 @@ namespace Client_Chat
         {
             if (tbMessageOutput.Text != null && tbMessageOutput.Text != "Введите сообщение" && tbMessageOutput.Text != "" && stream != null)
             {
-                message = String.Format("{0}:{1}", name, tbMessageOutput.Text);
+                message = String.Format("{0}: {1}", name, tbMessageOutput.Text);
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 try
                 {
@@ -100,7 +107,7 @@ namespace Client_Chat
                     stream = null;
                 }
                 
-                tbMessageOutput.Text = null;
+                tbMessageOutput.Text = "Введите сообщение";
                 Scroll.ScrollToEnd();
             }
             
@@ -108,35 +115,44 @@ namespace Client_Chat
 
         private void bConnect_Click(object sender, RoutedEventArgs e)
         {
-            Task task = null;
-            try
+            if (tbIPAddress.Text != "" && tbPort.Text != "")
             {
-                client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
-                stream = client.GetStream();
-            }
-            catch (System.NullReferenceException)
-            {
+                Task task = null;
+                try
+                {
+                    client = new TcpClient(tbIPAddress.Text, Convert.ToInt32(tbPort.Text));
+                    stream = client.GetStream();
+                }
+                catch (System.NullReferenceException)
+                {
 
-                tMessage.Text += "Подключение не удалось!\n";
-            }
-            catch (SocketException)
-            {
-                tMessage.Text += "Подключение не удалось!\n";
-            }
+                    tMessage.Text += "Подключение не удалось!\n";
+                }
+                catch (SocketException)
+                {
+                    tMessage.Text += "Подключение не удалось!\n";
+                }
 
-            if (stream != null)
-            {
-                task = Task.Run(Function);
-                tMessage.Text += "Вы успешно подключились к серверу\n";
-                bConnect.IsEnabled = false;
-                SQLConnect connect = new SQLConnect();
-                message = string.Format(connect.ReceiveName(tNick.Text));
-                byte[] data = Encoding.Unicode.GetBytes(message);
                 if (stream != null)
                 {
-                    stream.Write(data, 0, data.Length);
+                    task = Task.Run(Function);
+                    tMessage.Text += "Вы успешно подключились к серверу\n";
+                    bConnect.IsEnabled = false;
+                    SQLConnect connect = new SQLConnect();
+                    message = string.Format(connect.ReceiveName(getName));
+                    getName = message;
+                    byte[] data = Encoding.Unicode.GetBytes(message);
+                    if (stream != null)
+                    {
+                        stream.Write(data, 0, data.Length);
+                    }
                 }
             }
+            else
+            {
+                tMessage.Text += "IP и порт не могут быть пустыми\n";
+            }
+            
 
         }
 
@@ -144,7 +160,7 @@ namespace Client_Chat
         {
             if (stream != null)
             {
-                message = String.Format("{0}:{1}", name, "|||exit");
+                message = String.Format("{0}{1}", name, "|||exit");
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 stream.Write(data, 0, data.Length);
                 client.Close();

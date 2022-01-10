@@ -33,15 +33,9 @@
                     <TextBlock x:Name="tMessage" FontSize="20" TextWrapping="Wrap"/>
                 </StackPanel>
             </ScrollViewer>
-            
-            <TextBox x:Name="tbMessageOutput" Text="Введите сообщение" TextWrapping="Wrap" Grid.Row="3" Grid.ColumnSpan="4" FontSize="20" Height="80" PreviewMouseLeftButtonDown="tbMessageOutput_PreviewMouseLeftButtonDown" MaxLength="99"/>
+
+            <TextBox x:Name="tbMessageOutput" Text="Введите сообщение" TextWrapping="Wrap" Grid.Row="3" Grid.ColumnSpan="4" FontSize="20" Height="80" PreviewMouseLeftButtonDown="tbMessageOutput_PreviewMouseLeftButtonDown" MaxLength="98"/>
             <Button x:Name="bSend" Content="Отправить" Grid.Row="4" Grid.ColumnSpan="4" FontSize="20" Height="35" Click="bSend_Click"/>
         </Grid>
-        
-        
-
-        
-        
-        <TextBlock x:Name="tNick"/>
     </StackPanel>
 </Window>

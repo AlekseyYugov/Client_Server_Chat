@@ -32,7 +32,7 @@ namespace Client_Chat
             {
                 ChatWindow chatWindow = new ChatWindow();
                 chatWindow.Show();
-                chatWindow.tNick.Text = tbLogin.Text; // проверка
+                chatWindow.getName = tbLogin.Text; // проверка
                 Close();
             }
             else

@@ -43,7 +43,7 @@ namespace Server_Chat
                     try
                     {
                         message = GetMessage();
-                        if (message == ":|||exit")
+                        if (message == "|||exit")
                         {
                             message = String.Format("{0}: покинул чат\n", userName);
                             Console.WriteLine(message);
@@ -51,7 +51,7 @@ namespace Server_Chat
                             break;
                         }
                         messageHistory.InsertMessage(userName, message, Convert.ToString(DateTime.Now));
-                        message = String.Format("{0}: {1}", userName, message) + " : " + DateTime.Now + "\n";
+                        message = String.Format("{0} {1}", userName, message) + "\n";
                         Console.WriteLine(message);
                         server.BroadcastMessage(message, this.Id);
 
