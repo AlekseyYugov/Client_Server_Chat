@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Client_Chat"
         mc:Ignorable="d"
         Title="ChatWindow" Height="480" Width="800" Closing="Window_Closing">
+    
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -17,18 +18,30 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="Введите IP сервера" FontSize="20" TextAlignment="Center" Grid.Column="0"/>
             <TextBox x:Name="tbIPAddress" FontSize="20" Grid.Column="1" TextAlignment="Center"/>
             <TextBlock Text="Введите порт" FontSize="20" Grid.Column="2" TextAlignment="Center"/>
             <TextBox x:Name="tbPort" Grid.Column="3" FontSize="20" TextAlignment="Center"/>
+            <Button x:Name="bConnect" Content="Подключиться" FontSize="30" Height="50" Click="bConnect_Click" Grid.Row="1" Grid.ColumnSpan="4"/>
+            <ScrollViewer x:Name="Scroll" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Height="250">
+                <StackPanel>
+                    <TextBlock x:Name="tMessage" FontSize="20" TextWrapping="Wrap"/>
+                </StackPanel>
+            </ScrollViewer>
+            
+            <TextBox x:Name="tbMessageOutput" Text="Введите сообщение" TextWrapping="Wrap" Grid.Row="3" Grid.ColumnSpan="4" FontSize="20" Height="80" PreviewMouseLeftButtonDown="tbMessageOutput_PreviewMouseLeftButtonDown" MaxLength="99"/>
+            <Button x:Name="bSend" Content="Отправить" Grid.Row="4" Grid.ColumnSpan="4" FontSize="20" Height="35" Click="bSend_Click"/>
         </Grid>
-        <Button x:Name="bConnect" Content="Подключиться" FontSize="30" Height="50" Click="bConnect_Click"/>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <TextBlock x:Name="tMessage" TextWrapping="Wrap" Height="250"/>
-        </ScrollViewer>
-        <TextBox x:Name="tbMessageOutput" Text="Введите сообщение" FontSize="20" Height="80" PreviewMouseLeftButtonDown="tbMessageOutput_PreviewMouseLeftButtonDown"/>
-        <Button x:Name="bSend" Content="Отправить" FontSize="20" Height="35" Click="bSend_Click"/>
+        
+        
+
+        
+        
         <TextBlock x:Name="tNick"/>
     </StackPanel>
 </Window>

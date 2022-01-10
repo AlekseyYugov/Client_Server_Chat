@@ -46,6 +46,10 @@ namespace Client_Chat
 
                     bytes = 0;
                 }
+                catch (System.IO.IOException)
+                {
+                    return;
+                }
                 
 
             }
@@ -56,7 +60,7 @@ namespace Client_Chat
         {
             try
             {
-                Dispatcher.Invoke(() => tMessage.Text += message_nov + "\n");
+                Dispatcher.Invoke(() => tMessage.Text += message_nov);
                 Function();
             }
             catch (System.Threading.Tasks.TaskCanceledException)
@@ -84,8 +88,20 @@ namespace Client_Chat
             {
                 message = String.Format("{0}:{1}", name, tbMessageOutput.Text);
                 byte[] data = Encoding.Unicode.GetBytes(message);
-                stream.Write(data, 0, data.Length);
+                try
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                catch (System.IO.IOException)
+                {
+
+                    tMessage.Text += "Нет связи с сервером\n";
+                    bConnect.IsEnabled = true;
+                    stream = null;
+                }
+                
                 tbMessageOutput.Text = null;
+                Scroll.ScrollToEnd();
             }
             
         }
