@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Server_Chat
 {
@@ -13,7 +10,7 @@ namespace Server_Chat
         protected internal NetworkStream Stream { get; private set; }
         string userName;
         TcpClient client;
-        ServerObject server; // объект сервера
+        ServerObject server; 
 
         public ClientObject(TcpClient tcpClient, ServerObject serverObject)
         {
@@ -29,15 +26,12 @@ namespace Server_Chat
             {
                 MessageHistory messageHistory = new MessageHistory();
                 Stream = client.GetStream();
-                // получаем имя пользователя
                 string message = GetMessage();
                 userName = message;
 
                 message = userName + " вошел в чат\n";
-                // посылаем сообщение о входе в чат всем подключенным пользователям
                 server.BroadcastMessage(message, this.Id);
                 Console.WriteLine(message);
-                // в бесконечном цикле получаем сообщения от клиента
                 while (true)
                 {
                     try
@@ -71,16 +65,14 @@ namespace Server_Chat
             }
             finally
             {
-                // в случае выхода из цикла закрываем ресурсы
                 server.RemoveConnection(this.Id);
                 Close();
             }
         }
 
-        // чтение входящего сообщения и преобразование в строку
         private string GetMessage()
         {
-            byte[] data = new byte[64]; // буфер для получаемых данных
+            byte[] data = new byte[64];
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
             do
@@ -93,7 +85,6 @@ namespace Server_Chat
             return builder.ToString();
         }
 
-        // закрытие подключения
         protected internal void Close()
         {
             if (Stream != null)
