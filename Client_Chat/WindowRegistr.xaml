@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client_Chat"
         mc:Ignorable="d"
         Title="WindowRegistr" Height="450" Width="800">
-    <Grid>
+    <Grid KeyUp="Grid_KeyUp">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="270"/>

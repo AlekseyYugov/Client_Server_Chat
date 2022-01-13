@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Client_Chat
 {
-    /// <summary>
-    /// Логика взаимодействия для ChatWindow.xaml
-    /// </summary>
     public partial class ChatWindow : Window
     {
         TcpClient client = null;
@@ -51,8 +40,6 @@ namespace Client_Chat
                 {
                     return;
                 }
-                
-
             }
             message = builder.ToString();
             
@@ -68,7 +55,6 @@ namespace Client_Chat
             }
             catch (System.Threading.Tasks.TaskCanceledException)
             {
-
                 client.Close();
                 stream.Close();
             }
@@ -78,20 +64,20 @@ namespace Client_Chat
 
 
 
-        private void tbMessageOutput_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (tbMessageOutput.Text == "Введите сообщение")
-            {
-                tbMessageOutput.Text = null;
-            }
+        //private void tbMessageOutput_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (tbMessageOutput.Text == "Введите сообщение ")
+        //    {
+        //        tbMessageOutput.Text = null;
+        //    }
             
-        }
+        //}
 
 
 
-        private void bSend_Click(object sender, RoutedEventArgs e)
+        private void bSend_Click(object sender, RoutedEventArgs e) // отправка сообщения клиентом
         {
-            if (tbMessageOutput.Text != null && tbMessageOutput.Text != "Введите сообщение" && tbMessageOutput.Text != "" && stream != null)
+            if (tbMessageOutput.Text != null &&  tbMessageOutput.Text != "" && stream != null)
             {
                 message = String.Format("{0}: {1}", name, tbMessageOutput.Text);
                 byte[] data = Encoding.Unicode.GetBytes(message);
@@ -107,13 +93,13 @@ namespace Client_Chat
                     stream = null;
                 }
                 
-                tbMessageOutput.Text = "Введите сообщение";
+                tbMessageOutput.Text = null;
                 Scroll.ScrollToEnd();
             }
             
         }
 
-        private void bConnect_Click(object sender, RoutedEventArgs e)
+        private void bConnect_Click(object sender, RoutedEventArgs e) // подключение клиента
         {
             if (tbIPAddress.Text != "" && tbPort.Text != "")
             {
@@ -138,6 +124,8 @@ namespace Client_Chat
                     task = Task.Run(Function);
                     tMessage.Text += "Вы успешно подключились к серверу\n";
                     bConnect.IsEnabled = false;
+                    tbIPAddress.IsEnabled = false;
+                    tbPort.IsEnabled = false;
                     SQLConnect connect = new SQLConnect();
                     message = string.Format(connect.ReceiveName(getName));
                     getName = message;
@@ -152,21 +140,50 @@ namespace Client_Chat
             {
                 tMessage.Text += "IP и порт не могут быть пустыми\n";
             }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) // обработка закрытия чата пользователем
+        {
+            Disconnect();
             
-
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Grid_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (bConnect.IsEnabled == true)
+                {
+                    bConnect_Click(sender, e);
+                }
+                else
+                {
+                    bSend_Click(sender, e);
+                }
+                
+            }
+            if (e.Key == Key.Escape)
+            {
+                Close();
+                Disconnect();
+            }
+        }
+        private void Disconnect()
         {
             if (stream != null)
             {
                 message = String.Format("{0}{1}", name, "|||exit");
                 byte[] data = Encoding.Unicode.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                client.Close();
-                stream.Close();
+                try
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                catch (System.ObjectDisposedException)
+                {
+                    client.Close();
+                    stream.Close();
+                }
+                
             }
-            
         }
     }
 }

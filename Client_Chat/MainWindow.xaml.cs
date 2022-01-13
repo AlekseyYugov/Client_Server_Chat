@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Client_Chat
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -32,7 +17,7 @@ namespace Client_Chat
             {
                 ChatWindow chatWindow = new ChatWindow();
                 chatWindow.Show();
-                chatWindow.getName = tbLogin.Text; // проверка
+                chatWindow.getName = tbLogin.Text;
                 Close();
             }
             else
@@ -46,6 +31,18 @@ namespace Client_Chat
             WindowRegistr windowRegistr = new WindowRegistr();
             windowRegistr.Owner = this;
             windowRegistr.Show();
+        }
+
+        private void Grid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                bOpen_Click(sender, e);
+            }
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         }
     }
 }

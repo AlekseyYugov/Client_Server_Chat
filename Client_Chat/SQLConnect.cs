@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client_Chat
 {
@@ -32,7 +28,7 @@ namespace Client_Chat
             
         }
         
-        public bool ReadingClientForOpenChat(string _login, string _password)
+        public bool ReadingClientForOpenChat(string _login, string _password) // проверяем существуют ли данный пользователь в БД
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             string sqlExpressionSelect = "SELECT * FROM Users";
@@ -76,7 +72,7 @@ namespace Client_Chat
             }
             return false;
         }
-        public string ReceiveName(string _login)
+        public string ReceiveName(string _login) // определяем имя пользователя по логину из БД
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             string sqlExpressionSelect = "SELECT * FROM Users";
